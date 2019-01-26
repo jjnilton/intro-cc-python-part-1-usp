@@ -2,9 +2,7 @@ def main():
     jogo()
 
 def computador_escolhe_jogada(n, m):
-    #print("Vez do computador")
-    #print("n do pc", n)
-    #print("m do pc", m)
+
     jogada = 0
     resto_simulado = 0
     while (jogada <= m and jogada <= n):
@@ -12,9 +10,7 @@ def computador_escolhe_jogada(n, m):
         if (jogada > m or jogada > n):
             break
         resto_simulado = n - jogada
-        #print(jogada)
         if (resto_simulado % (m+1) == 0):
-            #print("jogada_do_pc:",jogada)
             if (jogada == 1):
                 print("O computador tirou uma peça.")
             else:
@@ -56,67 +52,41 @@ def partida():
         if (n < 1 and m < 1):
             print("Oops! Jogada inválida! Tente de novo.")
     if (n % (m+1) == 0):
-        #print(n,"é múltiplo de",m+1)
-        pc_comeca = False
-        primeiro_a_jogar = "Você"
-        segundo_a_jogar = "Computador"
+        primeiro_jogador = "usuário"
+        segundo_jogador = "computador"
+        primeiro_a_jogar = usuario_escolhe_jogada
+        segundo_a_jogar = computador_escolhe_jogada
         print ("\nVocê começa!\n")
         
     else:
-        pc_comeca = True
-        #print(n,"não é múltiplo de",m+1)
-        primeiro_a_jogar = "\nComputador"
-        segundo_a_jogar = "Você"
-        print (primeiro_a_jogar, "começa!\n")
+        primeiro_jogador = "computador"
+        segundo_jogador = "usuário"
+        primeiro_a_jogar = computador_escolhe_jogada
+        segundo_a_jogar = usuario_escolhe_jogada
+        print ("Computador começa!\n")
         
-    pecas_inicial = n
-    max_pecas_por_jogada = m
-    #print("Numero total de pecas:", n)
-    #print("Pecas que podem ser tiradas por jogada:", m)
-    vencedor = "computador"
-    # jogadas
+    vencedor = ""
     pecas_restantes = n
-    #print(">pecas_restantes",pecas_restantes)
     while (pecas_restantes > 0):
-        if (pc_comeca):
-            pecas_tiradas_pelo_computador = computador_escolhe_jogada(n, m)
-            pecas_restantes = pecas_restantes - pecas_tiradas_pelo_computador
-            n = pecas_restantes
-            if (pecas_restantes == 1):
-                print("Agora resta apenas uma peça no tabuleiro.\n")
-            else:
-                print("Agora restam",pecas_restantes,"no tabuleiro.\n")
-            #print(">pecas_restnates depois do computador tirar",pecas_restantes)
-            if (pecas_restantes == 0):
-                vencedor = "computador"
-                break
-            pecas_tiradas_pelo_jogador = usuario_escolhe_jogada(n, m)
-            pecas_restantes = pecas_restantes - pecas_tiradas_pelo_jogador
-            n = pecas_restantes
-            if (pecas_restantes == 1):
-                print("Agora resta apenas uma peça no tabuleiro.\n")
-            elif (pecas_restantes > 1):
-                print("Agora restam",pecas_restantes,"no tabuleiro.\n")
-        elif (not pc_comeca):
-            pecas_tiradas_pelo_jogador = usuario_escolhe_jogada(n, m)
-            pecas_restantes = pecas_restantes - pecas_tiradas_pelo_jogador
-            n = pecas_restantes
-            if (pecas_restantes == 1):
-                print("Agora resta apenas uma peça no tabuleiro.\n")
-            else:
-                print("Agora restam",pecas_restantes,"no tabuleiro.\n")
-            if (pecas_restantes == 0):
-                vencedor = "usuário"
-                break
-            pecas_tiradas_pelo_computador = computador_escolhe_jogada(n, m)
-            pecas_restantes = pecas_restantes - pecas_tiradas_pelo_computador
-            n = pecas_restantes
-            if (pecas_restantes == 1):
-                print("Agora resta apenas uma peça no tabuleiro.\n")
-            elif(pecas_restantes > 1):
-                print("Agora restam",pecas_restantes,"no tabuleiro.\n")
-            #print(">pecas_restnates depois do pc tirar",pecas_restantes)
-    print("Fim do jogo! O",vencedor,"ganhou!\n")
+        pecas_tiradas_pelo_primeiro = primeiro_a_jogar(n, m)
+        ultimo_jogador = primeiro_jogador
+        pecas_restantes = pecas_restantes - pecas_tiradas_pelo_primeiro
+        n = pecas_restantes
+        if (pecas_restantes == 1):
+            print("Agora resta apenas uma peça no tabuleiro.\n")
+        else:
+            print("Agora restam",pecas_restantes,"no tabuleiro.\n")
+        # inverte função
+        aux_a_jogar = primeiro_a_jogar
+        primeiro_a_jogar = segundo_a_jogar
+        segundo_a_jogar = aux_a_jogar
+        # inverte jogador
+        aux_jogador = primeiro_jogador
+        primeiro_jogador = segundo_jogador
+        segundo_jogador = aux_jogador
+
+        vencedor = ultimo_jogador
+    print("Fim do jogo! O", vencedor, "ganhou!\n")
         
         
 def campeonato():
@@ -141,6 +111,3 @@ def jogo():
         print("Opção inválida, tente novamente.")
 
 main()
-
-
-
